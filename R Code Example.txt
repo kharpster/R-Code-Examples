@@ -1,0 +1,857 @@
+
+R version 4.3.3 (2024-02-29) -- "Angel Food Cake"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[R.app GUI 1.80 (8340) aarch64-apple-darwin20]
+
+[Workspace restored from /Users/Kristin/.RData]
+[History restored from /Users/Kristin/.Rapp.history]
+
+> install.packages(emmeans)
+Error: object 'emmeans' not found
+> install.packages("emmeans")
+--- Please select a CRAN mirror for use in this session ---
+trying URL 'https://cran.case.edu/bin/macosx/big-sur-arm64/contrib/4.3/emmeans_1.11.1.tgz'
+Content type 'application/x-gzip' length 2225006 bytes (2.1 MB)
+==================================================
+downloaded 2.1 MB
+
+
+The downloaded binary packages are in
+	/var/folders/1n/7w37gxyn1gjcbyf5fmk97nfh0000gp/T//RtmpdDzS5G/downloaded_packages
+> install.packages("sjstats")
+trying URL 'https://cran.case.edu/bin/macosx/big-sur-arm64/contrib/4.3/sjstats_0.19.0.tgz'
+Content type 'application/x-gzip' length 379760 bytes (370 KB)
+==================================================
+downloaded 370 KB
+
+
+The downloaded binary packages are in
+	/var/folders/1n/7w37gxyn1gjcbyf5fmk97nfh0000gp/T//RtmpdDzS5G/downloaded_packages
+> install.packages("lme4")
+trying URL 'https://cran.case.edu/bin/macosx/big-sur-arm64/contrib/4.3/lme4_1.1-37.tgz'
+Content type 'application/x-gzip' length 7081042 bytes (6.8 MB)
+==================================================
+downloaded 6.8 MB
+
+
+The downloaded binary packages are in
+	/var/folders/1n/7w37gxyn1gjcbyf5fmk97nfh0000gp/T//RtmpdDzS5G/downloaded_packages
+i
+> install.packages("lmerTest")
+trying URL 'https://cran.case.edu/bin/macosx/big-sur-arm64/contrib/4.3/lmerTest_3.1-3.tgz'
+Content type 'application/x-gzip' length 531000 bytes (518 KB)
+==================================================
+downloaded 518 KB
+
+
+The downloaded binary packages are in
+	/var/folders/1n/7w37gxyn1gjcbyf5fmk97nfh0000gp/T//RtmpdDzS5G/downloaded_packages
+> library(emmeans)
+Welcome to emmeans.
+Caution: You lose important information if you filter this package's results.
+See '? untidy'
+> library(sjstas)
+Error in library(sjstas) : there is no package called ‘sjstas’
+> library(sjstats)
+> library(lme4)
+Loading required package: Matrix
+> library(lmerTest)
+
+Attaching package: ‘lmerTest’
+
+The following object is masked from ‘package:lme4’:
+
+    lmer
+
+The following object is masked from ‘package:stats’:
+
+    step
+
+> lagdata <- read.csv('~/Documents/Nursing Study 2 - for R/Lag-Table 1.csv')
+> edemadata <- read.csv("~/Documents/Nursing Study 2 - for R/Edema-Table 1.csv")
+> paindata <- read.csv('~/Documents/Nursing Study 2 - for R/Pain-Table 1.csv')
+> quickdata <- read.csv('~/Documents/Nursing Study 2 - for R/Quick_Dash-Table 1.csv')
+> attach(lagdata)
+> lagmodel <- lmer(lag~as.factor(visit) + (1|patient))
+> anova(lagmodel)
+Type III Analysis of Variance Table with Satterthwaite's method
+                 Sum Sq Mean Sq NumDF  DenDF F value    Pr(>F)    
+as.factor(visit)  15303  3825.7     4 158.73  55.797 < 2.2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> summary(lagmodel)
+Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: lag ~ as.factor(visit) + (1 | patient)
+
+REML criterion at convergence: 1532.3
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-2.3546 -0.4229 -0.1042  0.4506  2.7125 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ patient  (Intercept) 22.53    4.746   
+ Residual             68.57    8.280   
+Number of obs: 213, groups:  patient, 62
+
+Fixed effects:
+                  Estimate Std. Error      df t value Pr(>|t|)    
+(Intercept)         27.961      1.215 171.564  23.018  < 2e-16 ***
+as.factor(visit)2  -19.649      1.612 155.074 -12.188  < 2e-16 ***
+as.factor(visit)3  -20.856      1.661 158.591 -12.559  < 2e-16 ***
+as.factor(visit)4  -16.958      1.781 164.208  -9.520  < 2e-16 ***
+as.factor(visit)5  -13.479      2.094 166.611  -6.436 1.26e-09 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) as.()2 as.()3 as.()4
+as.fctr(v)2 -0.565                     
+as.fctr(v)3 -0.549  0.429              
+as.fctr(v)4 -0.515  0.397  0.401       
+as.fctr(v)5 -0.434  0.339  0.344  0.330
+> effect_size::eta_squared(lagmodel, partial=TRUE)
+Error in loadNamespace(x) : there is no package called ‘effect_size’
+> eta_sq(lagmodel)
+Error: 'eta_sq' is defunct.
+Use 'effectsize::eta_squared()' instead.
+See help("Defunct")
+> effectsize::eta_squared(lagmodel, partial = TRUE)
+# Effect Size for ANOVA (Type III)
+
+Parameter        | Eta2 (partial) |       95% CI
+------------------------------------------------
+as.factor(visit) |           0.58 | [0.50, 1.00]
+
+- One-sided CIs: upper bound fixed at [1.00].
+> emmeans(lagmodel, list(pairwise~as.factor(visit)),adjust = "tukey")
+$`emmeans of visit`
+ visit emmean   SE  df lower.CL upper.CL
+     1  27.96 1.21 176    25.56    30.36
+     2   8.31 1.37 190     5.62    11.01
+     3   7.11 1.42 193     4.30     9.91
+     4  11.00 1.56 202     7.93    14.08
+     5  14.48 1.92 208    10.70    18.26
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+
+$`pairwise differences of visit`
+ 1               estimate   SE  df t.ratio p.value
+ visit1 - visit2    19.65 1.61 160  12.177  <.0001
+ visit1 - visit3    20.86 1.66 164  12.544  <.0001
+ visit1 - visit4    16.96 1.78 169   9.501  <.0001
+ visit1 - visit5    13.48 2.10 171   6.418  <.0001
+ visit2 - visit3     1.21 1.75 159   0.689  0.9586
+ visit2 - visit4    -2.69 1.87 166  -1.437  0.6046
+ visit2 - visit5    -6.17 2.17 168  -2.841  0.0400
+ visit3 - visit4    -3.90 1.89 159  -2.065  0.2406
+ visit3 - visit5    -7.38 2.18 163  -3.377  0.0080
+ visit4 - visit5    -3.48 2.26 162  -1.538  0.5396
+
+Degrees-of-freedom method: kenward-roger 
+P value adjustment: tukey method for comparing a family of 5 estimates 
+
+> attach(edemadata)
+The following objects are masked from lagdata:
+
+    patient, visit
+
+> edemamodel <- lmer(edema~as.factor(visit) + (1|patient))
+> edemamodel <- lmer(edema~as.factor(visit) + (1|patient))
+> anova(edemamodel)
+Type III Analysis of Variance Table with Satterthwaite's method
+                 Sum Sq Mean Sq NumDF  DenDF F value Pr(>F)
+as.factor(visit) 3.4513 0.86282     4 115.22  1.8741 0.1197
+> summary(edemamodel)
+Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: edema ~ as.factor(visit) + (1 | patient)
+
+REML criterion at convergence: 420.8
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-6.2246 -0.1576  0.0806  0.3058  1.6961 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ patient  (Intercept) 0.3810   0.6173  
+ Residual             0.4604   0.6785  
+Number of obs: 169, groups:  patient, 58
+
+Fixed effects:
+                   Estimate Std. Error        df t value Pr(>|t|)    
+(Intercept)         5.29327    0.12243 110.58047  43.236   <2e-16 ***
+as.factor(visit)2  -0.32103    0.14229 116.16126  -2.256   0.0259 *  
+as.factor(visit)3  -0.27264    0.14804 116.15597  -1.842   0.0681 .  
+as.factor(visit)4  -0.29535    0.17258 118.65197  -1.711   0.0896 .  
+as.factor(visit)5   0.07103    0.29426 118.31997   0.241   0.8097    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) as.()2 as.()3 as.()4
+as.fctr(v)2 -0.484                     
+as.fctr(v)3 -0.459  0.424              
+as.fctr(v)4 -0.395  0.377  0.384       
+as.fctr(v)5 -0.230  0.223  0.223  0.199
+> effectsize::eta_squared(edemamodel, partial = TRUE)
+# Effect Size for ANOVA (Type III)
+
+Parameter        | Eta2 (partial) |       95% CI
+------------------------------------------------
+as.factor(visit) |           0.06 | [0.00, 1.00]
+
+- One-sided CIs: upper bound fixed at [1.00].
+> attach(paindata)
+The following objects are masked from edemadata:
+
+    patient, visit, X, X.1
+
+The following objects are masked from lagdata:
+
+    patient, visit
+
+> painmodel <- lmer(pain~as.factor(visit) + (1|patient))
+> anova(painmodel)
+Type III Analysis of Variance Table with Satterthwaite's method
+                 Sum Sq Mean Sq NumDF  DenDF F value    Pr(>F)    
+as.factor(visit) 106.21  26.553     4 157.08  9.4953 6.688e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> summary(painmodel)
+Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: pain ~ as.factor(visit) + (1 | patient)
+
+REML criterion at convergence: 853.1
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.6501 -0.5714 -0.2481  0.3870  3.5266 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ patient  (Intercept) 0.5519   0.7429  
+ Residual             2.7964   1.6722  
+Number of obs: 213, groups:  patient, 62
+
+Fixed effects:
+                  Estimate Std. Error       df t value Pr(>|t|)    
+(Intercept)         2.6033     0.2328 186.8143  11.183  < 2e-16 ***
+as.factor(visit)2  -1.4857     0.3204 151.1044  -4.638 7.57e-06 ***
+as.factor(visit)3  -1.5830     0.3362 156.9525  -4.709 5.44e-06 ***
+as.factor(visit)4  -1.6367     0.3605 163.5536  -4.540 1.09e-05 ***
+as.factor(visit)5  -1.6801     0.4193 168.1888  -4.007 9.22e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) as.()2 as.()3 as.()4
+as.fctr(v)2 -0.605                     
+as.fctr(v)3 -0.577  0.432              
+as.fctr(v)4 -0.540  0.400  0.393       
+as.fctr(v)5 -0.461  0.345  0.340  0.318
+> effectsize::eta_squared(painmodel, partial = TRUE)
+# Effect Size for ANOVA (Type III)
+
+Parameter        | Eta2 (partial) |       95% CI
+------------------------------------------------
+as.factor(visit) |           0.19 | [0.10, 1.00]
+
+- One-sided CIs: upper bound fixed at [1.00].
+> emmeans(painmodel, list(pairwise~as.factor(visit)),adjust = "tukey")
+$`emmeans of visit`
+ visit emmean    SE  df lower.CL upper.CL
+     1  2.603 0.233 191    2.144     3.06
+     2  1.118 0.258 198    0.608     1.63
+     3  1.020 0.278 201    0.472     1.57
+     4  0.967 0.307 206    0.362     1.57
+     5  0.923 0.376 208    0.183     1.66
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+
+$`pairwise differences of visit`
+ 1               estimate    SE  df t.ratio p.value
+ visit1 - visit2   1.4857 0.321 161   4.635  0.0001
+ visit1 - visit3   1.5830 0.337 166   4.703  0.0001
+ visit1 - visit4   1.6367 0.361 172   4.530  0.0001
+ visit1 - visit5   1.6801 0.421 176   3.994  0.0009
+ visit2 - visit3   0.0972 0.350 159   0.278  0.9987
+ visit2 - visit4   0.1510 0.375 168   0.402  0.9944
+ visit2 - visit5   0.1943 0.432 172   0.449  0.9915
+ visit3 - visit4   0.0537 0.385 162   0.140  0.9999
+ visit3 - visit5   0.0971 0.440 166   0.221  0.9995
+ visit4 - visit5   0.0434 0.459 169   0.095  1.0000
+
+Degrees-of-freedom method: kenward-roger 
+P value adjustment: tukey method for comparing a family of 5 estimates 
+
+> attach(quickdata)
+The following objects are masked from paindata:
+
+    patient, visit, X, X.1
+
+The following objects are masked from edemadata:
+
+    patient, visit, X, X.1
+
+The following objects are masked from lagdata:
+
+    patient, visit
+
+> quickmodel <- lmer(quick_dash~as.factor(visit) + (1|patient))
+> anova(quickmodel)
+Type III Analysis of Variance Table with Satterthwaite's method
+                 Sum Sq Mean Sq NumDF  DenDF F value    Pr(>F)    
+as.factor(visit) 6246.8  1561.7     4 146.04  10.566 1.514e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> summary(quickmodel)
+Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: quick_dash ~ as.factor(visit) + (1 | patient)
+
+REML criterion at convergence: 1613.7
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.2089 -0.5991 -0.0985  0.4121  3.0818 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ patient  (Intercept) 105.0    10.25   
+ Residual             147.8    12.16   
+Number of obs: 200, groups:  patient, 61
+
+Fixed effects:
+                  Estimate Std. Error      df t value Pr(>|t|)    
+(Intercept)         27.219      2.068 132.288  13.161  < 2e-16 ***
+as.factor(visit)2   -4.133      2.468 145.960  -1.674   0.0962 .  
+as.factor(visit)3   -4.090      2.577 149.012  -1.587   0.1146    
+as.factor(visit)4  -13.573      2.779 154.526  -4.884 2.58e-06 ***
+as.factor(visit)5  -16.727      3.141 150.123  -5.326 3.60e-07 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) as.()2 as.()3 as.()4
+as.fctr(v)2 -0.495                     
+as.fctr(v)3 -0.475  0.432              
+as.fctr(v)4 -0.452  0.397  0.409       
+as.fctr(v)5 -0.386  0.354  0.361  0.339
+> effectsize::eta_squared(quickmodel, partial = TRUE)
+# Effect Size for ANOVA (Type III)
+
+Parameter        | Eta2 (partial) |       95% CI
+------------------------------------------------
+as.factor(visit) |           0.22 | [0.12, 1.00]
+
+- One-sided CIs: upper bound fixed at [1.00].
+> emmeans(quickmodel, list(pairwise~as.factor(visit)),adjust = "tukey")
+$`emmeans of visit`
+ visit emmean   SE  df lower.CL upper.CL
+     1   27.2 2.07 135    23.13     31.3
+     2   23.1 2.31 157    18.52     27.6
+     3   23.1 2.43 166    18.34     27.9
+     4   13.6 2.61 179     8.49     18.8
+     5   10.5 3.03 193     4.52     16.5
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+
+$`pairwise differences of visit`
+ 1               estimate   SE  df t.ratio p.value
+ visit1 - visit2    4.133 2.47 148   1.672  0.4542
+ visit1 - visit3    4.090 2.58 151   1.584  0.5097
+ visit1 - visit4   13.573 2.79 157   4.872  <.0001
+ visit1 - visit5   16.727 3.15 152   5.314  <.0001
+ visit2 - visit3   -0.043 2.69 143  -0.016  1.0000
+ visit2 - visit4    9.440 2.90 150   3.258  0.0119
+ visit2 - visit5   12.594 3.24 147   3.888  0.0014
+ visit3 - visit4    9.483 2.92 144   3.250  0.0123
+ visit3 - visit5   12.637 3.27 144   3.865  0.0016
+ visit4 - visit5    3.154 3.42 147   0.922  0.8881
+
+Degrees-of-freedom method: kenward-roger 
+P value adjustment: tukey method for comparing a family of 5 estimates 
+
+> shapiro.test(quick_dash)
+
+	Shapiro-Wilk normality test
+
+data:  quick_dash
+W = 0.88133, p-value = 1.894e-11
+
+> install.packages("car")
+trying URL 'https://cran.case.edu/bin/macosx/big-sur-arm64/contrib/4.3/car_3.1-3.tgz'
+Content type 'application/x-gzip' length 1520823 bytes (1.5 MB)
+==================================================
+downloaded 1.5 MB
+
+
+The downloaded binary packages are in
+	/var/folders/1n/7w37gxyn1gjcbyf5fmk97nfh0000gp/T//RtmpdDzS5G/downloaded_packages
+> library(car)
+Loading required package: carData
+> leveneTest(quick_dash ~ visit)
+Error in leveneTest.formula(quick_dash ~ visit) : 
+  Levene's test is not appropriate with quantitative explanatory variables.
+> leveneTest(quick_dash ~ as.factor(visit))
+Levene's Test for Homogeneity of Variance (center = median)
+       Df F value  Pr(>F)  
+group   4  3.1549 0.01532 *
+      195                  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> attach(lagdata)
+The following objects are masked from quickdata:
+
+    patient, visit
+
+The following objects are masked from paindata:
+
+    patient, visit
+
+The following objects are masked from edemadata:
+
+    patient, visit
+
+The following objects are masked from lagdata (pos = 8):
+
+    lag, patient, visit
+
+> leveneTest(lag ~ as.factor(visit))
+Levene's Test for Homogeneity of Variance (center = median)
+       Df F value    Pr(>F)    
+group   4  7.8178 6.889e-06 ***
+      208                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> attach(paindata)
+The following objects are masked from lagdata (pos = 3):
+
+    patient, visit
+
+The following objects are masked from quickdata:
+
+    patient, visit, X, X.1
+
+The following objects are masked from paindata (pos = 7):
+
+    pain, patient, visit, X, X.1
+
+The following objects are masked from edemadata:
+
+    patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 9):
+
+    patient, visit
+
+> leveneTest(pain ~ as.factor(visit))
+Levene's Test for Homogeneity of Variance (center = median)
+       Df F value    Pr(>F)    
+group   4  5.4851 0.0003228 ***
+      208                      
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+> attach(edemadata)
+The following objects are masked from paindata (pos = 3):
+
+    patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 4):
+
+    patient, visit
+
+The following objects are masked from quickdata:
+
+    patient, visit, X, X.1
+
+The following objects are masked from paindata (pos = 8):
+
+    patient, visit, X, X.1
+
+The following objects are masked from edemadata (pos = 9):
+
+    edema, patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 10):
+
+    patient, visit
+
+> leveneTest(edema ~ as.factor(visit))
+Levene's Test for Homogeneity of Variance (center = median)
+       Df F value Pr(>F)
+group   4  0.1465 0.9643
+      164               
+> attach(paindata)
+The following objects are masked from edemadata (pos = 3):
+
+    patient, visit, X, X.1
+
+The following objects are masked from paindata (pos = 4):
+
+    pain, patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 5):
+
+    patient, visit
+
+The following objects are masked from quickdata:
+
+    patient, visit, X, X.1
+
+The following objects are masked from paindata (pos = 9):
+
+    pain, patient, visit, X, X.1
+
+The following objects are masked from edemadata (pos = 10):
+
+    patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 11):
+
+    patient, visit
+
+> shapiro.test(pain)
+
+	Shapiro-Wilk normality test
+
+data:  pain
+W = 0.76291, p-value < 2.2e-16
+
+> attach(edemadata)
+The following objects are masked from paindata (pos = 3):
+
+    patient, visit, X, X.1
+
+The following objects are masked from edemadata (pos = 4):
+
+    edema, patient, visit, X, X.1
+
+The following objects are masked from paindata (pos = 5):
+
+    patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 6):
+
+    patient, visit
+
+The following objects are masked from quickdata:
+
+    patient, visit, X, X.1
+
+The following objects are masked from paindata (pos = 10):
+
+    patient, visit, X, X.1
+
+The following objects are masked from edemadata (pos = 11):
+
+    edema, patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 12):
+
+    patient, visit
+
+> shapiro.test(edena)
+Error: object 'edena' not found
+> shapiro.test(edema)
+
+	Shapiro-Wilk normality test
+
+data:  edema
+W = 0.78742, p-value = 2.137e-14
+
+> attach(lagdata)
+The following objects are masked from edemadata (pos = 3):
+
+    patient, visit
+
+The following objects are masked from paindata (pos = 4):
+
+    patient, visit
+
+The following objects are masked from edemadata (pos = 5):
+
+    patient, visit
+
+The following objects are masked from paindata (pos = 6):
+
+    patient, visit
+
+The following objects are masked from lagdata (pos = 7):
+
+    lag, patient, visit
+
+The following objects are masked from quickdata:
+
+    patient, visit
+
+The following objects are masked from paindata (pos = 11):
+
+    patient, visit
+
+The following objects are masked from edemadata (pos = 12):
+
+    patient, visit
+
+The following objects are masked from lagdata (pos = 13):
+
+    lag, patient, visit
+
+> shapiro.test(lag)
+
+	Shapiro-Wilk normality test
+
+data:  lag
+W = 0.90035, p-value = 1.031e-10
+
+> shapiro.test(resid(lagmodl)
++ 
++ 
+> shapiro.test(resid(lagmodel))
+
+	Shapiro-Wilk normality test
+
+data:  resid(lagmodel)
+W = 0.97259, p-value = 0.0003658
+
+> qqnorm(resid(lagmodel))
+> leveneTest(resid(lagmodel)~as.factor(visit))
+Error in model.frame.default(form) : 
+  variable lengths differ (found for 'as.factor(visit)')
+> leveneTest(resid(lagmodel))
+Error in leveneTest.default(resid(lagmodel)) : 
+  argument "group" is missing, with no default
+> shapiro.test(lagmodel$residuals)
+Error in lagmodel$residuals : $ operator not defined for this S4 class
+> attach(edemadata)
+The following objects are masked from lagdata (pos = 3):
+
+    patient, visit
+
+The following objects are masked from edemadata (pos = 4):
+
+    edema, patient, visit, X, X.1
+
+The following objects are masked from paindata (pos = 5):
+
+    patient, visit, X, X.1
+
+The following objects are masked from edemadata (pos = 6):
+
+    edema, patient, visit, X, X.1
+
+The following objects are masked from paindata (pos = 7):
+
+    patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 8):
+
+    patient, visit
+
+The following objects are masked from quickdata:
+
+    patient, visit, X, X.1
+
+The following objects are masked from paindata (pos = 12):
+
+    patient, visit, X, X.1
+
+The following objects are masked from edemadata (pos = 13):
+
+    edema, patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 14):
+
+    patient, visit
+
+> shapiro.test(edemamodel$residuals)
+Error in edemamodel$residuals : $ operator not defined for this S4 class
+> shapiro.test(resid(edemamodel))
+
+	Shapiro-Wilk normality test
+
+data:  resid(edemamodel)
+W = 0.64219, p-value < 2.2e-16
+
+> attach(paindata)
+The following objects are masked from edemadata (pos = 3):
+
+    patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 4):
+
+    patient, visit
+
+The following objects are masked from edemadata (pos = 5):
+
+    patient, visit, X, X.1
+
+The following objects are masked from paindata (pos = 6):
+
+    pain, patient, visit, X, X.1
+
+The following objects are masked from edemadata (pos = 7):
+
+    patient, visit, X, X.1
+
+The following objects are masked from paindata (pos = 8):
+
+    pain, patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 9):
+
+    patient, visit
+
+The following objects are masked from quickdata:
+
+    patient, visit, X, X.1
+
+The following objects are masked from paindata (pos = 13):
+
+    pain, patient, visit, X, X.1
+
+The following objects are masked from edemadata (pos = 14):
+
+    patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 15):
+
+    patient, visit
+
+> shapiro.test(resid(painmodel))
+
+	Shapiro-Wilk normality test
+
+data:  resid(painmodel)
+W = 0.91496, p-value = 1.044e-09
+
+> attach(quickdata)
+The following objects are masked from paindata (pos = 3):
+
+    patient, visit, X, X.1
+
+The following objects are masked from edemadata (pos = 4):
+
+    patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 5):
+
+    patient, visit
+
+The following objects are masked from edemadata (pos = 6):
+
+    patient, visit, X, X.1
+
+The following objects are masked from paindata (pos = 7):
+
+    patient, visit, X, X.1
+
+The following objects are masked from edemadata (pos = 8):
+
+    patient, visit, X, X.1
+
+The following objects are masked from paindata (pos = 9):
+
+    patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 10):
+
+    patient, visit
+
+The following objects are masked from quickdata (pos = 13):
+
+    patient, quick_dash, visit, X, X.1
+
+The following objects are masked from paindata (pos = 14):
+
+    patient, visit, X, X.1
+
+The following objects are masked from edemadata (pos = 15):
+
+    patient, visit, X, X.1
+
+The following objects are masked from lagdata (pos = 16):
+
+    patient, visit
+
+> shapiro.test(resid(quickmodel))
+
+	Shapiro-Wilk normality test
+
+data:  resid(quickmodel)
+W = 0.96165, p-value = 2.995e-05
+
+> attach(lagdata)
+The following objects are masked from quickdata (pos = 3):
+
+    patient, visit
+
+The following objects are masked from paindata (pos = 4):
+
+    patient, visit
+
+The following objects are masked from edemadata (pos = 5):
+
+    patient, visit
+
+The following objects are masked from lagdata (pos = 6):
+
+    lag, patient, visit
+
+The following objects are masked from edemadata (pos = 7):
+
+    patient, visit
+
+The following objects are masked from paindata (pos = 8):
+
+    patient, visit
+
+The following objects are masked from edemadata (pos = 9):
+
+    patient, visit
+
+The following objects are masked from paindata (pos = 10):
+
+    patient, visit
+
+The following objects are masked from lagdata (pos = 11):
+
+    lag, patient, visit
+
+The following objects are masked from quickdata (pos = 14):
+
+    patient, visit
+
+The following objects are masked from paindata (pos = 15):
+
+    patient, visit
+
+The following objects are masked from edemadata (pos = 16):
+
+    patient, visit
+
+The following objects are masked from lagdata (pos = 17):
+
+    lag, patient, visit
+
+> 
